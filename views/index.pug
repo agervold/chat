@@ -1,0 +1,12 @@
+extends layout
+block content
+	body#index
+		h2 Hi, #{user.username}
+		ul#conversations
+		p#statusMessage
+		#messages
+			form(action="/m" method="POST" id="newMessageForm")
+				input(type="text" name="message" placeholder="Skriv en besked" required)
+				input(type="submit")
+		script(src='http://code.jquery.com/jquery-1.10.1.min.js')
+		script(src="/scripts/script.js")
