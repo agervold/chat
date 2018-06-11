@@ -1,12 +1,38 @@
 extends layout
 block content
-	body#index
-		h2 Hi, #{user.username}
-		ul#conversations
-		p#statusMessage
-		#messages
-			form(action="/m" method="POST" id="newMessageForm")
-				input(type="text" name="message" placeholder="Skriv en besked" required)
-				input(type="submit")
-		script(src='http://code.jquery.com/jquery-1.10.1.min.js')
-		script(src="/scripts/script.js")
+    body#index
+        h2 Hi, #{user.username}
+        if user.conversations.length > 0
+            ul#conversations
+            for conversation in user.conversations
+                li=conversation
+        else
+            p You have no active conversations
+        if user.friends.length > 0
+            h3 Friends
+            ul#friendsList
+            for friend in user.friends
+                li #{friend.username} - #{friend.status}
+        else
+            p You have no friends
+        if user.friendRequests.length > 0
+            h3 Friend Requests
+            ul#friendRequests
+            for request in user.friendRequests
+                li
+                    =request
+                    form(action="/respondRequest" method="POST" id="respondRequestForm")
+                        input(type="hidden" name="username" value=request)
+                        input(type="submit" name="accept" value="Accept" required)
+                        input(type="submit" name="decline" value="Decline" required)
+        p#statusMessage
+        #messages
+        form(action="/addFriend" method="POST" id="addFriendForm")
+            input(type="text" name="username" placeholder="Username" required)
+            input(type="submit")
+        form(action="/m" method="POST" id="newMessageForm")
+            input(type="text" name="message" placeholder="Message" required)
+            input(type="submit")
+        a(href="/logout") Logout
+        script(src='http://code.jquery.com/jquery-1.10.1.min.js')
+        script(src="/scripts/script.js")
